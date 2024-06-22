@@ -1,5 +1,7 @@
 import sys
 
+import AppDesigns
+
 FEATURE_SEARCH_PRODUCT_TEXT = 'Search for a product'
 FEATURE_LIST_PRODUCTS_TEXT = 'List all available products in store'
 FEATURE_SHOW_CUSTOMER_INFO_TEXT = 'Display the details of the Customer'
@@ -42,13 +44,14 @@ class AccessLevel:
         self.navigate_to_feature(feature_number)
 
     def display_access_options(self):
-        print('Choose from the following options:')
+        AppDesigns.print_special('Choose from the following options:')
         index = 0
         for feature in self.feature_tuple:
             index = index + 1
             print(str(index) + ': ' + feature)
 
-        print("Enter the Feature Number you wish to choose.")
+        print("")
+        AppDesigns.print_special("Enter the Feature Number you wish to choose.")
         print("The Feature Number is the number to the left of each feature listed above.")
 
         feature = self.get_feature_as_input()
@@ -63,7 +66,7 @@ class AccessLevel:
 
     def get_feature_as_input(self):
         while True:
-            feature_number = input("")
+            feature_number = input("Enter here: ")
 
             if self.validate_feature_number(feature_number):
                 feature = self.feature_tuple[int(feature_number) - 1]
@@ -77,4 +80,4 @@ class AccessLevel:
 
     def navigate_to_feature(self, feature):
         print("You are now on")
-        print(feature)
+        print(feature + " Feature")

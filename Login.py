@@ -1,6 +1,7 @@
 import Data
 from AccessLevel import AccessLevel
 from User import User
+import AppDesigns
 
 
 class Login:
@@ -18,13 +19,14 @@ class Login:
         while True:
             username = input("Enter your username: ")
             password = input("Enter your password: ")
+            print("checking username.....")
+            AppDesigns.inject_progress_bar()
             is_logged_in = False
 
             for index in users:
-                print("checking username.....")
                 if users[index]['username'] == username and users[index]['password'] == password:
                     name = users[index]['name']
-                    print("Welcome " + name + "!")
+                    AppDesigns.print_welcome_message(name)
                     is_logged_in = True
                     user = User(users[index])
                     break
