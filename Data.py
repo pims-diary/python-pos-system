@@ -16,6 +16,7 @@ def retrieve_users(file_path):
             index = index + 1
     return data
 
+
 def retrieve_user_data(file_line):
     user = {}
     user['username'] = file_line[0]
@@ -23,6 +24,7 @@ def retrieve_user_data(file_line):
     user['name'] = file_line[2]
     user['role'] = file_line[3]
     return user
+
 
 def retrieve_product_data(file_line):
     product = {}
