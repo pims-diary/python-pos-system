@@ -1,49 +1,43 @@
 import sys
 
 import AppDesigns
-
-FEATURE_SEARCH_PRODUCT_TEXT = 'Search for a product'
-FEATURE_LIST_PRODUCTS_TEXT = 'List all available products in store'
-FEATURE_SHOW_CUSTOMER_INFO_TEXT = 'Display the details of the Customer'
-FEATURE_CHECKOUT_TEXT = 'Checkout Items for a Customer'
-FEATURE_LIST_PURCHASES_TEXT = 'List purchase history for the store'
-FEATURE_SHOW_BILL_INFO_TEXT = 'Retrieve the bill details for a particular purchase'
+import Resources
 
 
 class AccessLevel:
     feature_tuple = ()
 
-    def __init__(self, user):
+    def __init__(self, user, product):
+        self.user = user
+        self.validate_access_by_role(user)
+
+    def validate_access_by_role(self, user):
         if user.role == 'Manager':
             self.feature_tuple = (
-                FEATURE_SEARCH_PRODUCT_TEXT,
-                FEATURE_LIST_PRODUCTS_TEXT,
-                FEATURE_SHOW_CUSTOMER_INFO_TEXT,
-                FEATURE_CHECKOUT_TEXT,
-                FEATURE_LIST_PURCHASES_TEXT,
-                FEATURE_SHOW_BILL_INFO_TEXT
+                Resources.FEATURE_SEARCH_PRODUCT_TEXT,
+                Resources.FEATURE_LIST_PRODUCTS_TEXT,
+                Resources.FEATURE_SHOW_CUSTOMER_INFO_TEXT,
+                Resources.FEATURE_CHECKOUT_TEXT,
+                Resources.FEATURE_LIST_PURCHASES_TEXT,
+                Resources.FEATURE_SHOW_BILL_INFO_TEXT
             )
         elif user.role == 'Security':
             self.feature_tuple = (
-                FEATURE_SHOW_CUSTOMER_INFO_TEXT,
-                FEATURE_SHOW_BILL_INFO_TEXT
+                Resources.FEATURE_SHOW_CUSTOMER_INFO_TEXT,
+                Resources.FEATURE_SHOW_BILL_INFO_TEXT
             )
         elif user.role == 'Teller':
             self.feature_tuple = (
-                FEATURE_SEARCH_PRODUCT_TEXT,
-                FEATURE_LIST_PRODUCTS_TEXT,
-                FEATURE_CHECKOUT_TEXT,
-                FEATURE_SHOW_BILL_INFO_TEXT
+                Resources.FEATURE_SEARCH_PRODUCT_TEXT,
+                Resources.FEATURE_LIST_PRODUCTS_TEXT,
+                Resources.FEATURE_CHECKOUT_TEXT,
+                Resources.FEATURE_SHOW_BILL_INFO_TEXT
             )
         else:
             print("You do not have access to the POS at the moment. Please contact the Store Manager.")
             sys.exit()
 
-        feature_number = self.display_access_options()
-
-        self.navigate_to_feature(feature_number)
-
-    def display_access_options(self):
+    def display_access_options(self) -> str:
         AppDesigns.print_special('Choose from the following options:')
         index = 0
         for feature in self.feature_tuple:
@@ -66,7 +60,7 @@ class AccessLevel:
 
     def get_feature_as_input(self):
         while True:
-            feature_number = input("Enter here: ")
+            feature_number = AppDesigns.user_input("Enter here: ")
 
             if self.validate_feature_number(feature_number):
                 feature = self.feature_tuple[int(feature_number) - 1]
@@ -77,7 +71,3 @@ class AccessLevel:
                     "above.")
 
         return feature
-
-    def navigate_to_feature(self, feature):
-        print("You are now on")
-        print(feature + " Feature")

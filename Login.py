@@ -13,14 +13,14 @@ class Login:
         any entry in the users' dictionary.
         """
         global user
-        users = Data.retrieve_users('POS(Username_password).txt')
+        users = Data.retrieve_data('POS(Username_password).txt')
         # Create model to store current user
 
         while True:
-            username = input("Enter your username: ")
-            password = input("Enter your password: ")
+            username = AppDesigns.user_input("Enter your username: ")
+            password = AppDesigns.user_input("Enter your password: ")
             print("checking username.....")
-            AppDesigns.inject_progress_bar()
+            # AppDesigns.inject_progress_bar()
             is_logged_in = False
 
             for index in users:
@@ -32,11 +32,14 @@ class Login:
                     break
 
             if is_logged_in:
-                AccessLevel(user)
+                AccessLevel(user, {})
+                return is_logged_in, user
 
             if not is_logged_in:
                 print("Invalid username or password.")
-                try_again = input("Do you want to try again? (yes/no): ").strip().lower()
+                try_again = AppDesigns.user_input("Do you want to try again? (yes/no): ").strip().lower()
                 if try_again != 'yes':
                     print("Exiting the login system.")
                     break
+
+        return is_logged_in, {}
