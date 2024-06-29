@@ -33,3 +33,11 @@ class Product:
     @price.setter
     def price(self, value):
         self.product['price'] = value
+
+    @property  # this is also automatically the getter
+    def points(self):
+        return self.product['points']
+
+    @points.setter
+    def points(self, value):
+        self.product['points'] = value

@@ -5,14 +5,14 @@ import AppDesigns
 
 
 class Login:
+    def __init__(self):
+        self.user = User({})
 
-    @staticmethod
-    def perform_login():
+    def perform_login(self):
         """
         Prompt the user for a username and password, and check if they match
         any entry in the users' dictionary.
         """
-        global user
         users = Data.retrieve_data('POS(Username_password).txt')
         # Create model to store current user
 
@@ -28,12 +28,12 @@ class Login:
                     name = users[index]['name']
                     AppDesigns.print_welcome_message(name)
                     is_logged_in = True
-                    user = User(users[index])
+                    self.user = User(users[index])
                     break
 
             if is_logged_in:
-                AccessLevel(user, {})
-                return is_logged_in, user
+                AccessLevel(self.user)
+                return is_logged_in, self.user
 
             if not is_logged_in:
                 print("Invalid username or password.")
@@ -43,3 +43,6 @@ class Login:
                     break
 
         return is_logged_in, {}
+
+    def perform_logout(self):
+        self.user = User({})
