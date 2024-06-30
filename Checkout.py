@@ -2,14 +2,32 @@ import AppDesigns
 from ManageCustomers import ManageCustomers
 from ManageProducts import ManageProducts
 from CartItem import CartItem
+import Cart
 
 
 def add_to_cart_guidelines():
     print('Choose from the following options:')
     print('1. Add a product to Cart')
-    print('2. Proceed to Order Summary')
+    print('2. Show Order Summary')
     print('3. Exit Checkout')
     print('Type in 1, 2 or 3 to choose one of the above options')
+
+
+def exit_checkout():
+    print('\nAre you sure you want to exit the Checkout?')
+    AppDesigns.print_special('Note that you will lose all products in Cart if you exit Checkout')
+    response = AppDesigns.user_input('Type Y for Yes and N for No: ')
+
+    if response.upper() == 'Y':
+        return True
+    else:
+        return False
+
+
+def no_customer_found_message():
+    AppDesigns.print_special('\nNo customer was found in the database with the above mentioned email '
+                             'address.\n')
+    print('Do you want to add a new Customer and continue, or do you want to try a different email?')
 
 
 class Checkout:
@@ -17,31 +35,43 @@ class Checkout:
     email = ''
 
     def checkout_for_customer(self):
-        #   Ask for email to start checkout
-        self.collect_customer_email()
-        #   Check if customer exists (ManageCustomer)
-        customer_to_checkout = ManageCustomers()
-        search_result = customer_to_checkout.search_customer(self.email)
-        #   If yes, link to the customer to the cart
-        is_search_complete = customer_to_checkout.display_customer_after_search(search_result)
+        while True:
+            #   Ask for email to start checkout
+            self.collect_customer_email()
+            #   Check if customer exists (ManageCustomer)
+            customer_to_checkout = ManageCustomers()
+            search_result = customer_to_checkout.search_customer(self.email)
+            is_customer_found = customer_to_checkout.display_customer_after_search(search_result)
 
-        if is_search_complete:
-            #   Add items to cart
-            self.add_to_cart()
-        #   else create customer (ManageCustomer)
-        else:
-            # TODO: Add some information that says the customer was not found
-            #  and Do you want to create a new customer?
-            # TODO: If not, then send them back to Access page
-            is_creation_complete = customer_to_checkout.create_customer()
-
-            if not is_creation_complete:
+            if is_customer_found:
+                #   If Customer exists, then continue to Add items to cart
+                #   Note that the customers email is already in self.email,
+                #   which means the Cart is linked to the Customer
+                self.add_to_cart()
                 return
             else:
-                #   Link new customer to the cart
-                self.email = customer_to_checkout.customer.email
-                #   Add items to cart
-                self.add_to_cart()
+                #   else create customer
+                no_customer_found_message()
+                next_step = AppDesigns.user_input('Type 1 to Add a New Customer and 2 to Try a different email: ')
+
+                if next_step == '1':
+                    # Customer creation starts here
+                    is_creation_complete = customer_to_checkout.create_customer()
+
+                    if not is_creation_complete:
+                        # This code may be reached if the Customer does not consent to create
+                        # a database entry due to privacy. User is taken back to Main Menu.
+                        return
+                    else:
+                        #   Customer is created.
+                        #   So link new customer to the cart
+                        self.email = customer_to_checkout.customer.email
+                        #   Add items to cart
+                        self.add_to_cart()
+                        return
+
+                else:
+                    return
 
     #   TODO:Place order and show transaction summary
     #   TODO: Increase customer loyalty points
@@ -62,15 +92,12 @@ class Checkout:
                 self.add_product_to_cart()
             elif option == '2':
                 self.show_order_summary()
-                break
             elif option == '3':
-                # Do something
-                break
+                exit_feature = exit_checkout()
+                if exit_feature:
+                    break
             else:
                 AppDesigns.print_error('\nInvalid input.\n')
-
-        # TODO: If no, back to search options
-        # TODO: if exit is selected, then notify that items in Cart will not stay saved.
 
     def add_product_to_cart(self):
         # Search for a product by ID
@@ -84,31 +111,7 @@ class Checkout:
 
         # If yes, ask how many items of the product need to be added
         if response.upper() == 'Y':
-            print('\nHow many items of this product do you want to add?')
-            while True:
-                item_response = AppDesigns.user_input('Type in a number: ')
-                try:
-                    item_count = int(item_response)
-                    break
-                except ValueError:
-                    AppDesigns.print_error('\nInvalid Input\n')
-
-            new_item = CartItem()
-            is_item_in_cart = False
-            for index, item in enumerate(self.cart):
-                if item.product.id == manage.product.id:
-                    is_item_in_cart = True
-                    # Add to cart and go back to search options
-                    new_item.no_of_items = item.no_of_items + item_count
-                    new_item.product = manage.product
-                    self.cart[index] = new_item
-                    break
-            if not is_item_in_cart:
-                # Add to cart and go back to search options
-                new_item.no_of_items = item_count
-                new_item.product = manage.product
-                self.cart.append(new_item)
-            AppDesigns.print_special('\nPRODUCT ADDED!\n')
+            Cart.add_product_to_cart(self.cart, manage)
         else:
             print('\nThe product was NOT ADDED\n')
 
@@ -117,10 +120,12 @@ class Checkout:
         if not self.cart:
             AppDesigns.print_special('\nThere are no products in the Cart')
         elif len(self.cart) != 0:
-            AppDesigns.print_special('\nORDER SUMMARY:\n')
-            for index, item in enumerate(self.cart):
-                # TODO: Stylise with table
-                print('Item #' + str(index + 1))
-                print(item.product.name)
-                print(item.no_of_items)
-                print('')
+            Cart.display_order_summary(self.cart)
+            print('\nComplete the Purchase of the above products?')
+            response = AppDesigns.user_input('Type Y for Complete the Purchase and N for Continue adding items to '
+                                             'Cart: ')
+
+            if response.upper() == 'Y':
+                print('\nPlace Order starts here.\n')
+            else:
+                print('\nYou are back in the Cart.\n')

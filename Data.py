@@ -20,6 +20,8 @@ def retrieve_data(file_path):
                     data_unit = retrieve_product_data(file_line)
                 elif file_path == 'POS(Customer_details).txt':
                     data_unit = retrieve_customer_data(file_line)
+                elif file_path == 'POS(Transactions).txt':
+                    data_unit = retrieve_transaction_data(file_line)
                 data[index] = data_unit
                 index = index + 1
     except FileNotFoundError:
@@ -61,6 +63,28 @@ def retrieve_customer_data(file_line):
     return product
 
 
+def retrieve_transaction_data(file_line):
+    products_list = file_line[3].split(':')
+    products = []
+    for product in products_list:
+        properties = product.split(' ')
+        each_product = {
+            'id': properties[0],
+            'noOfItems': properties[1],
+            'price': properties[2]
+        }
+        products.append(each_product)
+
+    transaction = {
+        'id': file_line[0],
+        'email': file_line[1],
+        'amount': file_line[2],
+        'products': products,
+        'points': file_line[4]
+    }
+    return transaction
+
+
 def inject_new_data(file_path, data):
     """
     write data to a file
@@ -74,6 +98,8 @@ def inject_new_data(file_path, data):
             line = write_product_data(data)
         elif file_path == 'POS(Customer_details).txt':
             line = write_customer_data(data)
+        elif file_path == 'POS(Transactions).txt':
+            line = write_transaction_data(data)
         if line != '':
             file.write('\n' + line)
     except FileNotFoundError:
@@ -90,6 +116,10 @@ def write_product_data(product):
 
 def write_customer_data(customer):
     return customer.email + ',' + customer.phone + ',' + customer.name + ',' + customer.points
+
+
+def write_transaction_data(transaction):
+    return transaction.id + ',' + transaction.email + ',' + transaction.amount + ',' + transaction.products + ',' + transaction.points
 
 
 def edit_customer_data(email, field_name, value):
