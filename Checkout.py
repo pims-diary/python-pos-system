@@ -3,14 +3,9 @@ from ManageCustomers import ManageCustomers
 from ManageProducts import ManageProducts
 from CartItem import CartItem
 import Cart
-
-
-def add_to_cart_guidelines():
-    print('Choose from the following options:')
-    print('1. Add a product to Cart')
-    print('2. Show Order Summary')
-    print('3. Exit Checkout')
-    print('Type in 1, 2 or 3 to choose one of the above options')
+import Payment
+import LoyaltyPoints
+from ManageTransactions import ManageTransactions
 
 
 def exit_checkout():
@@ -30,11 +25,30 @@ def no_customer_found_message():
     print('Do you want to add a new Customer and continue, or do you want to try a different email?')
 
 
+def ask_for_purchase():
+    print('\nComplete the Purchase of the above products?')
+    response = AppDesigns.user_input('Type Y for Complete the Purchase and N for Continue adding items to '
+                                     'Cart: ')
+
+    if response.upper() == 'Y':
+        print('\nPlace Order starts here.\n')
+        return True
+    else:
+        print('\nYou are back in the Cart.\n')
+        return False
+
+
 class Checkout:
     cart: list[CartItem] = []
     email = ''
+    bill_amount = 0.0
 
-    def checkout_for_customer(self):
+    def checkout_flow(self):
+        is_customer_identified = self.identify_customer_for_checkout()
+        if is_customer_identified:
+            self.execute_checkout()
+
+    def identify_customer_for_checkout(self):
         while True:
             #   Ask for email to start checkout
             self.collect_customer_email()
@@ -47,8 +61,7 @@ class Checkout:
                 #   If Customer exists, then continue to Add items to cart
                 #   Note that the customers email is already in self.email,
                 #   which means the Cart is linked to the Customer
-                self.add_to_cart()
-                return
+                return True
             else:
                 #   else create customer
                 no_customer_found_message()
@@ -61,37 +74,54 @@ class Checkout:
                     if not is_creation_complete:
                         # This code may be reached if the Customer does not consent to create
                         # a database entry due to privacy. User is taken back to Main Menu.
-                        return
+                        return False
                     else:
                         #   Customer is created.
                         #   So link new customer to the cart
                         self.email = customer_to_checkout.customer.email
-                        #   Add items to cart
-                        self.add_to_cart()
-                        return
+                        return True
 
                 else:
-                    return
-
-    #   TODO:Place order and show transaction summary
-    #   TODO: Increase customer loyalty points
-    #   TODO: Store transaction details (ManageTransaction)
-    #   TODO: Print transaction as a separate txt file (ManageTransaction)
+                    return False
 
     def collect_customer_email(self):
         self.email = AppDesigns.user_input("Provide the customer's email to start the checkout: ")
 
-    def add_to_cart(self):
+    def execute_checkout(self):
         # Give two options search a product or exit checkout
         AppDesigns.print_special('\nWELCOME TO THE CART\n')
         while True:
-            add_to_cart_guidelines()
+            # Add to Cart + Show Order Summary
+            Cart.add_to_cart_guidelines()
             option = AppDesigns.user_input('Enter here: ')
 
             if option == '1':
+                #   Add items to cart
                 self.add_product_to_cart()
             elif option == '2':
-                self.show_order_summary()
+                #   Show Order Summary
+                are_items_in_cart = self.show_order_summary()
+                if are_items_in_cart:
+                    start_purchase = ask_for_purchase()
+                    if start_purchase:
+                        is_payment_complete = Payment.execute_payment(self.bill_amount)
+                        if is_payment_complete:
+                            #   Update Loyalty points for the purchase
+                            points_accrued = LoyaltyPoints.points_on_purchase(self.cart)
+                            LoyaltyPoints.update_loyalty_points_on_purchase(self.email, points_accrued)
+
+                            # Create transaction for the purchase
+                            manage_bill = ManageTransactions()
+                            manage_bill.save_transaction(self.email, self.bill_amount, self.cart, points_accrued)
+
+                            # Show Order Summary
+                            Cart.display_order_summary(self.cart)
+
+                            #   TODO:
+                            #    Print transaction as a separate txt file (ManageTransaction)
+
+                            return
+
             elif option == '3':
                 exit_feature = exit_checkout()
                 if exit_feature:
@@ -119,13 +149,7 @@ class Checkout:
         #   Show order summary and ask for placing order
         if not self.cart:
             AppDesigns.print_special('\nThere are no products in the Cart')
+            return False
         elif len(self.cart) != 0:
-            Cart.display_order_summary(self.cart)
-            print('\nComplete the Purchase of the above products?')
-            response = AppDesigns.user_input('Type Y for Complete the Purchase and N for Continue adding items to '
-                                             'Cart: ')
-
-            if response.upper() == 'Y':
-                print('\nPlace Order starts here.\n')
-            else:
-                print('\nYou are back in the Cart.\n')
+            self.bill_amount = Cart.display_order_summary(self.cart)
+            return True

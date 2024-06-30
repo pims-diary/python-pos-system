@@ -2,6 +2,8 @@ from Login import Login
 from AccessLevel import AccessLevel
 from FeatureNavigation import FeatureNavigation
 import AppDesigns
+import Data
+import Resources
 
 
 def main():
@@ -21,9 +23,6 @@ def main():
             is_logged_in = nav.execute_feature()
 
         login.perform_logout()
-
-
-    # Data.edit_customer_data('cust2@hotmail.com', Resources.CustomerField.EMAIL, 'cust41@gmail.com')
 
 
 if __name__ == "__main__":

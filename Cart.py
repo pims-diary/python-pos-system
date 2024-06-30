@@ -28,6 +28,7 @@ def display_order_summary(cart):
     console = Console()
     console.print(table)
     AppDesigns.print_special('\nTOTAL BILL: ' + '$' + str(amount) + '\n')
+    return amount
 
 
 def add_product_to_cart(cart: list[CartItem], manage: ManageProducts):
@@ -58,5 +59,9 @@ def add_product_to_cart(cart: list[CartItem], manage: ManageProducts):
     AppDesigns.print_special('\nPRODUCT ADDED!\n')
 
 
-class Cart:
-    pass
+def add_to_cart_guidelines():
+    print('Choose from the following options:')
+    print('1. Add a product to Cart')
+    print('2. Show Order Summary')
+    print('3. Exit Checkout')
+    print('Type in 1, 2 or 3 to choose one of the above options')

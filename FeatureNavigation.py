@@ -45,5 +45,5 @@ class FeatureNavigation:
         elif self.feature is Resources.FEATURE_CHECKOUT_TEXT:
 
             checkout = Checkout()
-            checkout.checkout_for_customer()
+            checkout.checkout_flow()
             return True

@@ -1,3 +1,6 @@
+from TransactionItem import TransactionItem
+
+
 class Transaction:
     def __init__(self):
         self.transaction = {
@@ -37,7 +40,7 @@ class Transaction:
         return self.transaction['products']
 
     @products.setter
-    def products(self, value):
+    def products(self, value: list[TransactionItem]):
         self.transaction['products'] = value
 
     @property  # this is also automatically the getter

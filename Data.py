@@ -119,7 +119,20 @@ def write_customer_data(customer):
 
 
 def write_transaction_data(transaction):
-    return transaction.id + ',' + transaction.email + ',' + transaction.amount + ',' + transaction.products + ',' + transaction.points
+    products_list = ''
+    for product in transaction.products:
+        product_string = product.id + ' ' + str(product.no_of_items) + ' ' + str(product.price)
+        if products_list != '':
+            products_list = products_list + ';' + product_string
+        else:
+            products_list = product_string
+    return (
+            transaction.id
+            + ',' + transaction.email
+            + ',' + transaction.amount
+            + ',' + products_list
+            + ',' + transaction.points
+    )
 
 
 def edit_customer_data(email, field_name, value):
