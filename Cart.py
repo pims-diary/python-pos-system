@@ -27,8 +27,8 @@ def display_order_summary(cart):
 
     console = Console()
     console.print(table)
-    AppDesigns.print_special('\nTOTAL BILL: ' + '$' + str(amount) + '\n')
-    return amount
+    AppDesigns.print_special('\nTOTAL BILL: ' + '$' + str(round(amount, 2)) + '\n')
+    return round(amount, 2)
 
 
 def add_product_to_cart(cart: list[CartItem], manage: ManageProducts):
