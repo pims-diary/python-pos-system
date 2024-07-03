@@ -11,6 +11,7 @@ def execute_payment(bill_amount):
     elif payment_type_action == '2':
         return cash_payment(bill_amount)
     elif payment_type_action == '3':
+        print('\nExiting Bill Payment...\n')
         return
 
 
@@ -47,6 +48,7 @@ def cash_payment(bill_amount):
         print("\nPay cash now. If you want to abort cash payment press '0'")
         cash = AppDesigns.user_input('How much cash did the customer provide? $')
         if cash == '0':
+            print('\nExiting Bill payment...\n')
             return False
         decimal_split = cash.split('.')
         if len(decimal_split) == 2 and len(decimal_split[1]) == 2:

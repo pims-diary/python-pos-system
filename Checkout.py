@@ -8,17 +8,6 @@ import LoyaltyPoints
 from ManageTransactions import ManageTransactions, ask_for_printed_copy
 
 
-def exit_checkout():
-    print('\nAre you sure you want to exit the Checkout?')
-    AppDesigns.print_special('Note that you will lose all products in Cart if you exit Checkout')
-    response = AppDesigns.user_input('Type Y for Yes and N for No: ')
-
-    if response.upper() == 'Y':
-        return True
-    else:
-        return False
-
-
 def no_customer_found_message():
     AppDesigns.print_special('\nNo customer was found in the database with the above mentioned email '
                              'address.\n')
@@ -65,7 +54,7 @@ class Checkout:
             else:
                 #   else create customer
                 no_customer_found_message()
-                next_step = AppDesigns.user_input('Type 1 to Add a New Customer and 2 to Try a different email: ')
+                next_step = AppDesigns.user_input('Type 1 to Add a New Customer and 2 to go back to Main Menu: ')
 
                 if next_step == '1':
                     # Customer creation starts here
@@ -128,7 +117,7 @@ class Checkout:
                             return
 
             elif option == '3':
-                exit_feature = exit_checkout()
+                exit_feature = self.exit_checkout()
                 if exit_feature:
                     break
             else:
@@ -158,3 +147,16 @@ class Checkout:
         elif len(self.cart) != 0:
             self.bill_amount = Cart.display_order_summary(self.cart)
             return True
+
+    def exit_checkout(self):
+        print('\nAre you sure you want to exit the Checkout?')
+        AppDesigns.print_special('Note that you will lose all products in Cart if you exit Checkout')
+        response = AppDesigns.user_input('Type Y for Yes and N for No: ')
+
+        if response.upper() == 'Y':
+            self.cart.clear()
+            self.email = ''
+            self.bill_amount = 0.0
+            return True
+        else:
+            return False

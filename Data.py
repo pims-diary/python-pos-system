@@ -190,6 +190,6 @@ def read_credit_card(card_file):
 
 def print_bill(text_to_print, transaction_id):
     time_in_utc = datetime.utcnow()
-    file_name = 'Bill ' + ' ' + str(time_in_utc) + '.txt'
+    file_name = 'Bill ' + str(time_in_utc) + '.txt'
     with open(file_name, 'w') as file:
         file.write(text_to_print)
