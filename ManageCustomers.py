@@ -67,7 +67,7 @@ class ManageCustomers:
         print("\nExiting Customer List...\n")
 
     def create_customer(self):
-        AppDesigns.print_special('Create a New Customer')
+        AppDesigns.print_special('\n\nCreate a New Customer')
         print('\nNOTE: Before registering the Customer, please inform them that their email address and phone number '
               'will be stored in our system and ask if they consent for it.')
         consent = AppDesigns.user_input('Do they consent on having their email and phone number stored? Type Y for '

@@ -5,7 +5,7 @@ from CartItem import CartItem
 import Cart
 import Payment
 import LoyaltyPoints
-from ManageTransactions import ManageTransactions
+from ManageTransactions import ManageTransactions, ask_for_printed_copy
 
 
 def exit_checkout():
@@ -114,12 +114,17 @@ class Checkout:
                             manage_bill = ManageTransactions()
                             manage_bill.save_transaction(self.email, self.bill_amount, self.cart, points_accrued)
 
+                            AppDesigns.inject_progress_bar()
+
                             # Show Order Summary
                             Cart.display_order_summary(self.cart)
 
-                            #   TODO:
-                            #    Print transaction as a separate txt file (ManageTransaction)
+                            # Print a copy of the bill if the customer asks for it
+                            need_printed_copy = ask_for_printed_copy()
+                            if need_printed_copy:
+                                manage_bill.print_transaction()
 
+                            AppDesigns.print_special('\nThe Purchase is Complete!')
                             return
 
             elif option == '3':
@@ -148,7 +153,7 @@ class Checkout:
     def show_order_summary(self):
         #   Show order summary and ask for placing order
         if not self.cart:
-            AppDesigns.print_special('\nThere are no products in the Cart')
+            AppDesigns.print_special('\nThere are no products in the Cart\n')
             return False
         elif len(self.cart) != 0:
             self.bill_amount = Cart.display_order_summary(self.cart)

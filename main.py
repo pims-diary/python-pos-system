@@ -15,6 +15,7 @@ def main():
 
         is_logged_in = login_result[0]
         user = login_result[1]
+        AppDesigns.inject_progress_bar()
 
         while is_logged_in:
             access = AccessLevel(user)

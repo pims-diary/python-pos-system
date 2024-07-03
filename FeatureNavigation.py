@@ -3,6 +3,11 @@ from ManageProducts import ManageProducts
 from ManageCustomers import ManageCustomers
 from AccessLevel import AccessLevel
 from Checkout import Checkout
+from ManageTransactions import ManageTransactions
+
+
+def ask_to_continue():
+    input('Press any key to continue to go back to the Main Menu: ')
 
 
 class FeatureNavigation:
@@ -18,18 +23,21 @@ class FeatureNavigation:
 
             search_product = ManageProducts()
             search_product.search()
+            ask_to_continue()
             return True
 
         elif self.feature is Resources.FEATURE_LIST_PRODUCTS_TEXT:
 
             list_products = ManageProducts()
             list_products.list_all_products()
+            ask_to_continue()
             return True
 
-        if self.feature is Resources.FEATURE_SHOW_CUSTOMER_INFO_TEXT:
+        elif self.feature is Resources.FEATURE_SHOW_CUSTOMER_INFO_TEXT:
 
             search_customer = ManageCustomers()
             search_customer.search()
+            ask_to_continue()
             return True
 
         elif self.feature is Resources.FEATURE_ACCESS_LEVEL_TEXT:
@@ -37,13 +45,28 @@ class FeatureNavigation:
             AccessLevel(self.user)
             return True
 
-        elif self.feature is Resources.FEATURE_LOGOUT_TEXT:
-
-            self.user = {}
-            return False
-
         elif self.feature is Resources.FEATURE_CHECKOUT_TEXT:
 
             checkout = Checkout()
             checkout.checkout_flow()
+            ask_to_continue()
             return True
+
+        elif self.feature is Resources.FEATURE_LIST_PURCHASES_TEXT:
+
+            manage_bills = ManageTransactions()
+            manage_bills.list_all_transactions()
+            ask_to_continue()
+            return True
+
+        elif self.feature is Resources.FEATURE_SHOW_BILL_INFO_TEXT:
+
+            manage_bills = ManageTransactions()
+            manage_bills.search()
+            ask_to_continue()
+            return True
+
+        elif self.feature is Resources.FEATURE_LOGOUT_TEXT:
+
+            self.user = {}
+            return False

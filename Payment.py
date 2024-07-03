@@ -1,6 +1,7 @@
 import math
 
 import AppDesigns
+import Data
 
 
 def execute_payment(bill_amount):
@@ -28,15 +29,16 @@ def credit_card_payment(bill_amount):
     AppDesigns.print_special('\nDo you consent for us to scan your credit card? ')
     response = AppDesigns.user_input('Type Y for Yes, and N for No: ')
     if response == 'Y':
-        card = AppDesigns.user_input('\nPlease present your card: ')
-        if card == 'valid':
-            # TODO: Show card details in secure mode
-            #  Read from the txt file
-            print('Show card details in secure mode')
-            print('Continue payment')
+        card_validity = AppDesigns.user_input('\nPlease present your card: ')
+        displayable_card = display_card(card_validity)[-3:]
+        secure_card = 'XXXX - XXXX - XXXX - X' + displayable_card + '\n'
+        print('\nUsing the below card to complete the payment:\n')
+        print(secure_card)
+        if card_validity == 'valid':
+            AppDesigns.print_special('\nPayment Complete!\n')
             return True
         else:
-            print('Show card details in secure mode')
+            AppDesigns.print_special('\nPayment Failed! Card Transaction broke down.')
             return False
 
 
@@ -69,3 +71,15 @@ def cash_payment(bill_amount):
                 return True
         else:
             AppDesigns.print_error('\nInvalid Amount\n')
+
+
+def display_card(validity):
+    card = {}
+    if validity == 'valid':
+        card = Data.read_credit_card('Customer_credit_card_valid.txt')
+    else:
+        card = Data.read_credit_card('Customer_credit_card_invalid.txt')
+
+    card_number = card['cardNumber']
+
+    return card_number

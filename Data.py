@@ -1,4 +1,5 @@
 import traceback
+from datetime import datetime
 
 import AppDesigns
 import Resources
@@ -172,3 +173,23 @@ def edit_customer_data(email, field_name, value):
     else:
         AppDesigns.print_error('This field name for customer is not configured in the program. Please report this to '
                                'the Manager. Field Name: ' + field_name)
+
+
+def read_credit_card(card_file):
+    with open(card_file, 'r') as file:
+        card_details = file.readlines()
+        card = {
+            'cardNumber': card_details[0].replace('\n', ''),
+            'validUntil': card_details[1].replace('\n', ''),
+            'cvv': card_details[2].replace('\n', ''),
+            'name': card_details[3].replace('\n', '')
+        }
+
+    return card
+
+
+def print_bill(text_to_print, transaction_id):
+    time_in_utc = datetime.utcnow()
+    file_name = 'Bill ' + ' ' + str(time_in_utc) + '.txt'
+    with open(file_name, 'w') as file:
+        file.write(text_to_print)
