@@ -1,9 +1,7 @@
-from Login import Login
-from AccessLevel import AccessLevel
-from FeatureNavigation import FeatureNavigation
-import AppDesigns
-import Data
-import Resources
+from Accesses.Login import Login
+from Accesses.AccessLevel import AccessLevel
+from Navigation.FeatureNavigation import FeatureNavigation
+from Design import AppDesigns
 
 
 def main():
