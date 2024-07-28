@@ -1,6 +1,10 @@
-cust1@gmail.com,021123456,Customer 22,1265
+cust1@gmail.com,021123456,Customer 22,1585
 cust41@gmail.com,021123457,Customer 2,385
 cust3@yahoo.com,021123458,Customer 3,430
 cust32@gmail.com,0210291234,Customer 32,0
 cust7@hotmail.com,02102765432,Customer 7,0
-humpty11@gmail.com,0284202152,Humpty Dumpty,230
+humpty11@gmail.com,0284202152,Humpty Dumpty,265
+customer1@gmail.com,021029931122,Test,0
+customer11@gmail.com,0212878372,test11,0
+customer33@gmail.com,0213123213,Test123,0
+customer111@gmail.com,021321323,Testiuiu,0

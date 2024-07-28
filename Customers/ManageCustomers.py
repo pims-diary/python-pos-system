@@ -23,11 +23,11 @@ class ManageCustomers:
             print("\nPlease provide the email address of the customer.")
             email = AppDesigns.user_input("Enter here: ")
             print("")
-            is_search_complete = self.search_and_display_customer(email)
+            is_search_complete = self.__search_and_display_customer(email)
 
         print("\nExiting Customers Search...\n")
 
-    def search_and_display_customer(self, email):
+    def __search_and_display_customer(self, email):
         search_result = self.search_customer(email)
 
         is_search_complete = self.display_customer_after_search(search_result)

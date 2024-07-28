@@ -14,7 +14,7 @@ MARKDOWN = """
 console = Console()
 
 
-def progress_bar(count_value, total, suffix=''):
+def __progress_bar(count_value, total, suffix=''):
     bar_length = 100
     filled_up_length = int(round(bar_length * count_value / float(total)))
     percentage = round(100.0 * count_value / float(total), 1)
@@ -35,10 +35,9 @@ def inject_progress_bar():
     print("")
     for i in range(11):
         time.sleep(random.random())
-        progress_bar(i, 10)
+        __progress_bar(i, 10)
 
-    print("")
-    print("")
+    print("\n")
 
 
 def print_heading():
@@ -48,8 +47,7 @@ def print_heading():
 
 
 def print_welcome_message(name):
-    console.print("Welcome " + name + "!", style="bold green")
-    print("")
+    console.print("\nWelcome " + name + "!", style="bold green")
 
 
 def print_special(message):

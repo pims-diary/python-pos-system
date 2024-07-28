@@ -7,15 +7,15 @@ from Transactions.DataModel.TransactionItem import TransactionItem
 def format_printable_bill(transaction_data):
     transaction_id = 'Bill No.: ' + transaction_data.id
     email = 'Customers email: ' + transaction_data.email
-    amount = 'Bill Amount: ' + transaction_data.amount
-    points = 'Accrued Loyalty Points' + transaction_data.points
+    amount = 'Bill Amount: $' + transaction_data.amount
+    points = 'Accrued Loyalty Points: ' + transaction_data.points
 
     products = ''
     for product in transaction_data.products:
         each_product = (
                 'Product ID: ' + product.id + '\n' +
                 'No of Items: ' + product.no_of_items + '\n' +
-                'Total price: ' + product.price + '\n' + '\n'
+                'Total price: $' + product.price + '\n' + '\n'
         )
         products = products + each_product
 
@@ -25,7 +25,9 @@ def format_printable_bill(transaction_data):
             transaction_id + '\n' +
             email + '\n\n' +
             amount + '\n' +
-            points + '\n\n' +
+            points + '\n' +
+            'GST: 15%' + '\n\n' +
+            '---------------' + '\n' +
             'PRODUCT DETAILS' + '\n' +
             '---------------' + '\n' +
             products
@@ -36,7 +38,7 @@ def format_printable_bill(transaction_data):
 
 def ask_for_printed_copy():
     print('\nWould the customer like to have a printed copy of the Bill? ')
-    response = AppDesigns.user_input('Type Y for Yes or N for No:')
+    response = AppDesigns.user_input('Type Y for Yes or N for No: ')
     return True if response == 'Y' else False
 
 

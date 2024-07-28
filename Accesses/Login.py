@@ -6,7 +6,7 @@ from Design import AppDesigns
 
 class Login:
     def __init__(self):
-        self.user = User({})
+        self.__user = User({})
 
     def perform_login(self):
         """
@@ -28,15 +28,15 @@ class Login:
                     name = users[index]['name']
                     AppDesigns.print_welcome_message(name)
                     is_logged_in = True
-                    self.user = User(users[index])
+                    self.__user = User(users[index])
                     break
 
             if is_logged_in:
-                AccessLevel(self.user)
-                return is_logged_in, self.user
+                AccessLevel(self.__user)
+                return is_logged_in, self.__user
 
             if not is_logged_in:
-                print("Invalid username or password.")
+                AppDesigns.print_error('\nInvalid username or password.\n')
                 try_again = AppDesigns.user_input("Do you want to try again? (yes/no): ").strip().lower()
                 if try_again != 'yes':
                     print("Exiting the login system.")
@@ -45,4 +45,4 @@ class Login:
         return is_logged_in, {}
 
     def perform_logout(self):
-        self.user = User({})
+        self.__user = User({})

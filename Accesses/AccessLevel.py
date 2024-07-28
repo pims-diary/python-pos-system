@@ -8,11 +8,11 @@ class AccessLevel:
     feature_tuple = ()
 
     def __init__(self, user):
-        self.user = user
-        self.validate_access_by_role()
+        self.__user = user
+        self.__validate_access_by_role()
 
-    def validate_access_by_role(self):
-        if self.user.role == 'Manager':
+    def __validate_access_by_role(self):
+        if self.__user.role == 'Manager':
             self.feature_tuple = (
                 Resources.FEATURE_SEARCH_PRODUCT_TEXT,
                 Resources.FEATURE_LIST_PRODUCTS_TEXT,
@@ -23,13 +23,14 @@ class AccessLevel:
                 Resources.FEATURE_SHOW_BILL_INFO_TEXT,
                 Resources.FEATURE_LOGOUT_TEXT
             )
-        elif self.user.role == 'Security':
+        elif self.__user.role == 'Security':
             self.feature_tuple = (
                 Resources.FEATURE_SHOW_CUSTOMER_INFO_TEXT,
                 Resources.FEATURE_SHOW_BILL_INFO_TEXT,
+                Resources.FEATURE_LIST_ALL_CUSTOMERS,
                 Resources.FEATURE_LOGOUT_TEXT
             )
-        elif self.user.role == 'Teller':
+        elif self.__user.role == 'Teller':
             self.feature_tuple = (
                 Resources.FEATURE_SEARCH_PRODUCT_TEXT,
                 Resources.FEATURE_LIST_PRODUCTS_TEXT,
@@ -52,15 +53,15 @@ class AccessLevel:
         AppDesigns.print_special("Enter the Feature Number you wish to choose.")
         print("The Feature Number is the number to the left of each feature listed above.")
 
-        feature = self.get_feature_as_input()
+        feature = self.__get_feature_as_input()
 
         return feature
 
-    def get_feature_as_input(self):
+    def __get_feature_as_input(self):
         while True:
             feature_number = AppDesigns.user_input("Enter here: ")
 
-            if self.validate_feature_number(feature_number):
+            if self.__validate_feature_number(feature_number):
                 feature = self.feature_tuple[int(feature_number) - 1]
                 break
             else:
@@ -70,7 +71,7 @@ class AccessLevel:
 
         return feature
 
-    def validate_feature_number(self, feature_number):
+    def __validate_feature_number(self, feature_number):
         if int(feature_number) <= len(self.feature_tuple):
             return True
         else:

@@ -26,9 +26,9 @@ class ManageProducts:
 
     def search(self):
         AppDesigns.print_special("SEARCH A PRODUCT...\n")
-        self.get_search_type()
+        self.__get_search_type()
 
-    def get_search_type(self):
+    def __get_search_type(self):
         while True:
             search_guidelines()
             search_criteria = AppDesigns.user_input("Enter here: ")

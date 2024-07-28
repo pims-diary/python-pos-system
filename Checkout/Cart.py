@@ -1,13 +1,15 @@
 from rich.console import Console
 from rich.table import Table
 
+import Resources.Resources
 from Design import AppDesigns
 
 from Checkout.DataModel.CartItem import CartItem
+from Checkout.Payment.Discounts import Discounts
 from Products.ManageProducts import ManageProducts
 
 
-def display_order_summary(cart):
+def display_order_summary(cart, discounts: Discounts = None):
     print('')
     table = Table(title="ORDER SUMMARY")
     table.add_column("Item #", justify="right")
@@ -27,7 +29,30 @@ def display_order_summary(cart):
 
     console = Console()
     console.print(table)
-    AppDesigns.print_special('\nTOTAL BILL: ' + '$' + str(round(amount, 2)) + '\n')
+
+    total_amount = str(round(amount, 2))
+
+    print('\nTOTAL BILL: ' + '$' + total_amount + '\n')
+
+    gst = amount * 15.0 / 100.0
+
+    amount = amount + gst
+
+    print('GST (' + str(Resources.Resources.NEW_ZEALAND_GST_FOR_CONSUMERS) + '%): $' + str(round(gst, 2)))
+
+    if discounts is None:
+        AppDesigns.print_special('\nFINAL BILL: ' + '$' + str(round(amount, 2)) + '\n')
+
+    else:
+        if discounts.mode == '1':
+            print('Discount: ' + str(discounts.value) + '%')
+        else:
+            print('Discount applied!')
+
+        amount = discounts.discounted_amount
+
+        AppDesigns.print_special('\nFINAL BILL: ' + '$' + str(round(amount, 2)) + '\n')
+
     return round(amount, 2)
 
 
